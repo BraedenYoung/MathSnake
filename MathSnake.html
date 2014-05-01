@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-	<title></title>
+	<title>MathSnake</title>
 	<style type="text/css">
 		.container-canvas {
 			/* This could be done in one single declaration. See the extended sample. */
@@ -62,23 +62,23 @@
 		</div>
 	</div>
 
-	<!-- Jquery -->
-	<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js" type="text/javascript"></script>
+<!-- Jquery -->
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js" type="text/javascript"></script>
 
-	<script>
-		$(document).ready(function(){
+<script>
+	$(document).ready(function(){
 
-			var canvas = $("#canvas")[0];
-			var ctx = canvas.getContext("2d");
-			var w = $("#canvas").width();
-			var h = $("#canvas").height();
+		var canvas = $("#canvas")[0];
+		var ctx = canvas.getContext("2d");
+		var w = $("#canvas").width();
+		var h = $("#canvas").height();
 
-			var cw = 40;
-			var d, food, score, snake_array;
-			var foodPellets = [];
-			var run = false;
+		var cw = 40;
+		var d, food, score, snake_array;
+		var foodPellets = [];
+		var run = false;
 
-			function init(){
+		function init(){
 			d = "right"; //default direction
 			create_snake();
 			generateEquation();
@@ -103,30 +103,22 @@
 	    		init();
 	    		return;
 	    	}			
-
 	    })
-
-	    function create_snake()
-	    {
-			//Length of the snake
+	    function create_snake(){
+			//Length of initial snake
 			var length = 5;
 			snake_array = [];
-			for(var i = length-1; i>=0; i--)
-			{
+			for(var i = length-1; i>=0; i--){
 				snake_array.push({x: i, y:0});
 			}
 		}
-		
-
-		function create_food(value)
-		{
+		function create_food(value){
 			return food = {
 				x: Math.round(Math.random()*(w-cw)/cw), 
 				y: Math.round(Math.random()*(h-cw)/cw),
 				value:  value
 			};
-		}
-		
+		}	
 		function check_collision(x, y, array){
 			for(var i = 0; i < array.length; i++)
 			{
@@ -135,7 +127,6 @@
 			}
 			return false;
 		}
-
 		function generateEquation(){
 	    	// simple random equation generator 
 	    	var eqn,op,ans,a,b;
@@ -190,83 +181,82 @@
 	    	if(lesser != greater || lesser != ans)
 	    		foodPellets[2] = create_food(lesser);
 	    	$('#equation').text(eqn);
-	    }
-
-	    function paint(){
-	    	if(run){
-			// paint the canvas now
-			ctx.fillStyle = "white";
-			ctx.fillRect(0, 0, w, h);
-			ctx.strokeStyle = "black";
-			ctx.strokeRect(0, 0, w, h);
-			
-			// paint the grid
-			renderGrid(40, "#bab8b8");
-
-			//The movement for the snake
-			//Pop off the tail and place it infront of the head in the current direction
-			var nx = snake_array[0].x;
-			var ny = snake_array[0].y;
-
-			if(d == "right") nx++;
-			else if(d == "left") nx--;
-			else if(d == "up") ny--;
-			else if(d == "down") ny++;
-			
-			//Restart the game if the snake hits the wall or if the snake eats a bad pellet
-			if(nx == -1 || nx == w/cw || ny == -1 || ny == h/cw || check_collision(nx, ny, snake_array)||nx == foodPellets[1].x && ny == foodPellets[1].y||nx == foodPellets[2].x && ny == foodPellets[2].y){
-				//restart game
-				run = false;
-				$('#myModal').modal('show');
-				$('#scoreDisplay').text("Your score was: "+score);
-				
-				$(document).keydown(function(e){
-					var key = e.which;
-					//We will add another clause to prevent reverse gear
-					if(key == "13" || key == "32"){
-						$('#myModal').modal('hide');
-						run = true;
-						init();
-						return;
-					}			
-				})
-			}
-			else if(nx == foodPellets[0].x && ny == foodPellets[0].y){
-				var tail = {x: nx, y: ny};
-				score++;
-				generateEquation();
-			}
-			else{
-				var tail = snake_array.pop(); //pops out the last cell
-				tail.x = nx; tail.y = ny;
-			}
-			//The snake can now eat the food.
-			snake_array.unshift(tail); //puts back the tail as the first cell
-
-			for(var i = 0; i < snake_array.length; i++){
-				var c = snake_array[i];
-				if(typeof c != 'undefined')
-				paint_cell(c.x, c.y);
-			}
-			//paint the food
-			for (var i = 0 ; i <=2 ; i++){
-				debugger;
-				paint_food(foodPellets[0].x, foodPellets[0].y, foodPellets[0].value);
-				paint_food(foodPellets[1].x, foodPellets[1].y, foodPellets[1].value);
-				paint_food(foodPellets[2].x, foodPellets[2].y, foodPellets[2].value);
-			}	
-			//Lets paint the score
-			ctx.fillStyle = "#477282";
-			var score_text = "Score: " + score;
-			ctx.font="30px Arial";
-			ctx.fillText(score_text, 5, h-5);
 		}
-	}
-	function renderGrid(gridPixelSize, color){
-		ctx.save();
-		ctx.lineWidth = 0.2;
-		ctx.strokeStyle = color;
-	        // horizontal grid lines
+
+		function paint(){
+		    if(run){
+				// paint the canvas now
+				ctx.fillStyle = "white";
+				ctx.fillRect(0, 0, w, h);
+				ctx.strokeStyle = "black";
+				ctx.strokeRect(0, 0, w, h);
+				
+				// paint the grid
+				renderGrid(40, "#bab8b8");
+
+				//The movement for the snake
+				//Pop off the tail and place it infront of the head in the current direction
+				var nx = snake_array[0].x;
+				var ny = snake_array[0].y;
+
+				if(d == "right") nx++;
+				else if(d == "left") nx--;
+				else if(d == "up") ny--;
+				else if(d == "down") ny++;
+				
+				//Restart the game if the snake hits the wall or if the snake eats a bad pellet
+				if(nx == -1 || nx == w/cw || ny == -1 || ny == h/cw || check_collision(nx, ny, snake_array)||nx == foodPellets[1].x && ny == foodPellets[1].y||nx == foodPellets[2].x && ny == foodPellets[2].y){
+					//restart game
+					run = false;
+					$('#myModal').modal('show');
+					$('#scoreDisplay').text("Your score was: "+score);
+					
+					$(document).keydown(function(e){
+						var key = e.which;
+						//We will add another clause to prevent reverse gear
+						if(key == "13" || key == "32"){
+							$('#myModal').modal('hide');
+							run = true;
+							init();
+							return;
+						}			
+					})
+				}
+				else if(nx == foodPellets[0].x && ny == foodPellets[0].y){
+					var tail = {x: nx, y: ny};
+					score++;
+					generateEquation();
+				}
+				else{
+					var tail = snake_array.pop(); //pops out the last cell
+					tail.x = nx; tail.y = ny;
+				}
+				//The snake can now eat the food.
+				snake_array.unshift(tail); //puts back the tail as the first cell
+
+				for(var i = 0; i < snake_array.length; i++){
+					var c = snake_array[i];
+					if(typeof c != 'undefined')
+					paint_cell(c.x, c.y);
+				}
+				//paint the food
+				for (var i = 0 ; i <=2 ; i++){
+					paint_food(foodPellets[0].x, foodPellets[0].y, foodPellets[0].value);
+					paint_food(foodPellets[1].x, foodPellets[1].y, foodPellets[1].value);
+					paint_food(foodPellets[2].x, foodPellets[2].y, foodPellets[2].value);
+				}	
+				//Lets paint the score
+				ctx.fillStyle = "#477282";
+				var score_text = "Score: " + score;
+				ctx.font="30px Arial";
+				ctx.fillText(score_text, 5, h-5);
+			}
+		}
+		function renderGrid(gridPixelSize, color){
+			ctx.save();
+			ctx.lineWidth = 0.2;
+			ctx.strokeStyle = color;
+		        // horizontal grid lines
 	        for(var i = 0; i <= canvas.height; i = i + gridPixelSize){
 	        	ctx.beginPath();
 	        	ctx.moveTo(0, i);
@@ -309,7 +299,7 @@
 			else if(key == "39" && d != "left") d = "right";
 			else if(key == "40" && d != "up") d = "down";
 		})
-		}) // end of ready()
+	}) // end of ready()
 </script>
 <script src="http://netdna.bootstrapcdn.com/bootstrap/3.1.1/js/bootstrap.min.js"></script>
 </body>
