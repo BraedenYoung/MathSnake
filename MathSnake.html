@@ -120,8 +120,7 @@
 			};
 		}	
 		function check_collision(x, y, array){
-			for(var i = 0; i < array.length; i++)
-			{
+			for(var i = 0; i < array.length; i++){
 				if(array[i].x == x && array[i].y == y)
 					return true;
 			}
@@ -160,11 +159,11 @@
 	    		ans = b;
 	    		break; 
 	    		default:
-	    		ans = 9999;
 	    		break;
 	    	}
 	    	// add food pellets for each of the possible answers 
-	    	// This is the actual answer    	
+	    	// This is the actual answer    
+
 	    	foodPellets[0] = create_food(ans);
 
 	    	var lesser = ans-Math.floor(Math.random()*3+1);
@@ -176,11 +175,17 @@
 	    	}
 	    	if(lesser < 0)
 	    		lesser = greater -1;
-	    	if(greater!=ans)
+	    	if(greater!= ans)
 	    		foodPellets[1] = create_food(greater);
 	    	if(lesser != greater || lesser != ans)
 	    		foodPellets[2] = create_food(lesser);
-	    	$('#equation').text(eqn);
+	 
+	 
+	    	if(typeof foodPellets[0] == 'undefined' || !foodPellets[0].value || foodPellets[0].value == foodPellets[1].value || foodPellets[0].value == foodPellets[2].value) 
+	    		return generateEquation();
+	    	
+	   	   	$('#equation').text(eqn);
+	 
 		}
 
 		function paint(){
@@ -241,11 +246,9 @@
 				}
 				//paint the food
 				for (var i = 0 ; i <=2 ; i++){
-					paint_food(foodPellets[0].x, foodPellets[0].y, foodPellets[0].value);
-					paint_food(foodPellets[1].x, foodPellets[1].y, foodPellets[1].value);
-					paint_food(foodPellets[2].x, foodPellets[2].y, foodPellets[2].value);
+					paint_food(foodPellets[i].x, foodPellets[i].y, foodPellets[i].value);
 				}	
-				//Lets paint the score
+				//paint the score
 				ctx.fillStyle = "#477282";
 				var score_text = "Score: " + score;
 				ctx.font="30px Arial";
@@ -288,7 +291,10 @@
 	    	ctx.strokeRect(x*cw, y*cw, cw, cw);
 	    	ctx.fillStyle = "white";
 	    	ctx.font="30px Arial";
-	    	ctx.fillText(v, x*cw+7,y*cw+38);		
+	    	if(v>9)
+	    		ctx.fillText(v, x*cw+7,y*cw+38);		
+	    	else
+	    		ctx.fillText(v, x*cw+22, y*cw+38);
 	    }
 		//Lets add the keyboard controls now
 		$(document).keydown(function(e){
