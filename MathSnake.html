@@ -24,12 +24,10 @@
 	
 	<h1 id="equation" style="text-align:center"></h1>
 
-	
 	<div class="modal fade" id="welcomeModal" tabindex="-1" role="dialog" aria-labelledby="modal" aria-hidden="true">
 		<div class="modal-dialog">
 			<div class="modal-content">
 				<div class="modal-header">
-
 					<h1 class="modal-title" style="text-align:center"> Welcome to MathSnake</h1>
 				</div>
 				<div class="modal-body">
@@ -42,7 +40,6 @@
 			</div>
 		</div>
 	</div>
-
 
 	<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="basicModal" aria-hidden="true">
 		<div class="modal-dialog">
@@ -246,7 +243,10 @@
 				}
 				//paint the food
 				for (var i = 0 ; i <=2 ; i++){
-					paint_food(foodPellets[i].x, foodPellets[i].y, foodPellets[i].value);
+					if(foodPellets[i].value != null)
+						paint_food(foodPellets[i].x, foodPellets[i].y, foodPellets[i].value);
+					else
+						generateEquation()
 				}	
 				//paint the score
 				ctx.fillStyle = "#477282";
