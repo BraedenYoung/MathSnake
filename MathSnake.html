@@ -126,6 +126,8 @@
 		function generateEquation(){
 	    	// simple random equation generator 
 	    	var eqn,op,ans,a,b;
+
+	    	foodPellets = [];
 	    	
 	    	a = Math.floor(Math.random()*10);
 	    	b = Math.floor(Math.random()*10);
@@ -178,7 +180,7 @@
 	    		foodPellets[2] = create_food(lesser);
 	 
 	 
-	    	if(typeof foodPellets[0] == 'undefined' || !foodPellets[0].value || foodPellets[0].value == foodPellets[1].value || foodPellets[0].value == foodPellets[2].value) 
+	    	if(typeof foodPellets[0] == 'undefined' || foodPellets[0].value == null || foodPellets[0].value == foodPellets[1].value || foodPellets[0].value == foodPellets[2].value) 
 	    		return generateEquation();
 	    	
 	   	   	$('#equation').text(eqn);
@@ -209,20 +211,7 @@
 				//Restart the game if the snake hits the wall or if the snake eats a bad pellet
 				if(nx == -1 || nx == w/cw || ny == -1 || ny == h/cw || check_collision(nx, ny, snake_array)||nx == foodPellets[1].x && ny == foodPellets[1].y||nx == foodPellets[2].x && ny == foodPellets[2].y){
 					//restart game
-					run = false;
-					$('#myModal').modal('show');
-					$('#scoreDisplay').text("Your score was: "+score);
-					
-					$(document).keydown(function(e){
-						var key = e.which;
-						//We will add another clause to prevent reverse gear
-						if(key == "13" || key == "32"){
-							$('#myModal').modal('hide');
-							run = true;
-							init();
-							return;
-						}			
-					})
+					reset();
 				}
 				else if(nx == foodPellets[0].x && ny == foodPellets[0].y){
 					var tail = {x: nx, y: ny};
@@ -239,11 +228,11 @@
 				for(var i = 0; i < snake_array.length; i++){
 					var c = snake_array[i];
 					if(typeof c != 'undefined')
-					paint_cell(c.x, c.y);
+						paint_cell(c.x, c.y);
 				}
 				//paint the food
 				for (var i = 0 ; i <=2 ; i++){
-					if(foodPellets[i].value != null)
+					if(typeof(foodPellets[i]) != 'undefined' || foodPellets[i].value != null )
 						paint_food(foodPellets[i].x, foodPellets[i].y, foodPellets[i].value);
 					else
 						generateEquation()
@@ -295,6 +284,22 @@
 	    		ctx.fillText(v, x*cw+7,y*cw+38);		
 	    	else
 	    		ctx.fillText(v, x*cw+22, y*cw+38);
+	    }
+	    function reset(){
+			run = false;
+			$('#myModal').modal('show');
+			$('#scoreDisplay').text("Your score was: "+score);
+			
+			$(document).keydown(function(e){
+				var key = e.which;
+				//We will add another clause to prevent reverse gear
+				if(key == "13" || key == "32"){
+					$('#myModal').modal('hide');
+					run = true;
+					init();
+					return;
+				}			
+			})
 	    }
 		//Lets add the keyboard controls now
 		$(document).keydown(function(e){
