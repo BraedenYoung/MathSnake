@@ -59,23 +59,39 @@
 		</div>
 	</div>
 
-<!-- Jquery -->
-<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js" type="text/javascript"></script>
+	<!-- Jquery -->
+	<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js" type="text/javascript"></script>
 
-<script>
-	$(document).ready(function(){
+	<script>
+		$(document).ready(function(){
 
-		var canvas = $("#canvas")[0];
-		var ctx = canvas.getContext("2d");
-		var w = $("#canvas").width();
-		var h = $("#canvas").height();
+			var canvas = $("#canvas")[0];
+			var ctx = canvas.getContext("2d");
+			var w = $("#canvas").width();
+			var h = $("#canvas").height();
 
-		var cw = 40;
-		var d, food, score, snake_array;
-		var foodPellets = [];
-		var run = false;
+			var cw = 40;
+			var d, food, score, snake_array;
+			var foodPellets = [];
+			var run = false;
+			var welcome = true;
 
-		function init(){
+			function init(){
+				if(welcome){
+					$('#welcomeModal').modal('show');
+
+					$(document).keydown(function(e){
+						var key = e.which;
+						if(key == "13" || key == "32"){
+							$('#welcomeModal').modal('hide');
+							run = true;
+							welcome = false;
+							init();
+							return;
+						}			
+					})
+
+				}
 			d = "right"; //default direction
 			create_snake();
 			generateEquation();
@@ -90,17 +106,16 @@
 	    		game_loop = setInterval(paint, 160);
 	    }
 
-	    $('#welcomeModal').modal('show');
-
-	    $(document).keydown(function(e){
-	    	var key = e.which;
-	    	if(key == "13" || key == "32"){
+	    
+	    $(document).swipe({
+	    	tap:function(){
 	    		$('#welcomeModal').modal('hide');
 	    		run = true;
 	    		init();
 	    		return;
-	    	}			
-	    })
+	    	},
+	    	threshold:0
+	    });
 	    function create_snake(){
 			//Length of initial snake
 			var length = 5;
@@ -178,17 +193,17 @@
 	    		foodPellets[1] = create_food(greater);
 	    	if(lesser != greater || lesser != ans)
 	    		foodPellets[2] = create_food(lesser);
-	 
-	 
+
+
 	    	if(typeof foodPellets[0] == 'undefined' || foodPellets[0].value == null || foodPellets[0].value == foodPellets[1].value || foodPellets[0].value == foodPellets[2].value) 
 	    		return generateEquation();
 	    	
-	   	   	$('#equation').text(eqn);
-	 
-		}
+	    	$('#equation').text(eqn);
 
-		function paint(){
-		    if(run){
+	    }
+
+	    function paint(){
+	    	if(run){
 				// paint the canvas now
 				ctx.fillStyle = "white";
 				ctx.fillRect(0, 0, w, h);
@@ -234,8 +249,10 @@
 				for (var i = 0 ; i <=2 ; i++){
 					if(typeof(foodPellets[i]) != 'undefined' || foodPellets[i].value != null )
 						paint_food(foodPellets[i].x, foodPellets[i].y, foodPellets[i].value);
-					else
-						generateEquation()
+					else{
+						generateEquation();
+						return paint;
+					}
 				}	
 				//paint the score
 				ctx.fillStyle = "#477282";
@@ -249,13 +266,13 @@
 			ctx.lineWidth = 0.2;
 			ctx.strokeStyle = color;
 		        // horizontal grid lines
-	        for(var i = 0; i <= canvas.height; i = i + gridPixelSize){
-	        	ctx.beginPath();
-	        	ctx.moveTo(0, i);
-	        	ctx.lineTo(canvas.width, i);
-	        	ctx.closePath();
-	        	ctx.stroke();
-	        }
+		        for(var i = 0; i <= canvas.height; i = i + gridPixelSize){
+		        	ctx.beginPath();
+		        	ctx.moveTo(0, i);
+		        	ctx.lineTo(canvas.width, i);
+		        	ctx.closePath();
+		        	ctx.stroke();
+		        }
 	        // vertical grid lines
 	        for(var j = 0; j <= canvas.width; j = j + gridPixelSize){
 	        	ctx.beginPath();
@@ -286,21 +303,27 @@
 	    		ctx.fillText(v, x*cw+22, y*cw+38);
 	    }
 	    function reset(){
-			run = false;
-			$('#myModal').modal('show');
-			$('#scoreDisplay').text("Your score was: "+score);
-			
-			$(document).keydown(function(e){
-				var key = e.which;
-				//We will add another clause to prevent reverse gear
-				if(key == "13" || key == "32"){
-					$('#myModal').modal('hide');
-					run = true;
-					init();
-					return;
-				}			
+	    	run = false;
+	    	$('#myModal').modal('show');
+	    	$('#scoreDisplay').text("Your score was: "+score);
+
+	    	$(document).keydown(function(){
+				$('#myModal').modal('hide');
+				run = true;
+				init();
+				return;
 			})
+	    	$(document).swipe({
+	    		tap:function(){
+	    			$('#myModal').modal('hide');
+	    			run = true;
+	    			init();
+	    			return;
+	    		},
+	    		threshold:0
+	    	});
 	    }
+
 		//Lets add the keyboard controls now
 		$(document).keydown(function(e){
 			var key = e.which;
@@ -310,8 +333,22 @@
 			else if(key == "39" && d != "left") d = "right";
 			else if(key == "40" && d != "up") d = "down";
 		})
+		
+
+		//Enable swiping...
+		$(document).swipe( {
+		    //Generic swipe handler for all directions
+		    swipe:function(event, direction, distance, duration, fingerCount) {
+		    	d = direction 
+		    },
+		   //Default is 75px, set to 0 
+		   threshold:0
+		});
+
 	}) // end of ready()
+
 </script>
+<script src ="http://cdnjs.cloudflare.com/ajax/libs/jquery.touchswipe/1.6.4/jquery.touchSwipe.min.js"></script>
 <script src="http://netdna.bootstrapcdn.com/bootstrap/3.1.1/js/bootstrap.min.js"></script>
 </body>
 </html>
