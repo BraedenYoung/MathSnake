@@ -74,10 +74,8 @@
 			var d, food, score, snake_array;
 			var foodPellets = [];
 			var run = false;
-			var welcome = true;
 
 			function init(){
-				
 		
 				d = "right"; //default direction
 				create_snake();
@@ -96,12 +94,17 @@
 		    $('#welcomeModal').modal('show');
 
 	       	$(document).keydown(function(k){
-	    		if(k == 13 || k == 32){
+	       		key = k.which;
+	    		if(key == 13 || key == 32){
 					$('#welcomeModal').modal('hide');
 					$('#myModal').modal('hide');
 					run = true;
 					return init();
 				}
+				else if(key == "37" && d != "right") d = "left";
+				else if(key == "38" && d != "down") d = "up";
+				else if(key == "39" && d != "left") d = "right";
+				else if(key == "40" && d != "up") d = "down";
 			});
 	    	$(document).swipe({
 	    		tap:function(){
@@ -110,7 +113,12 @@
 	    			run = true;
 	    			return init();
 	    		},
-	    		threshold:5
+	    		threshold:5,
+	    		swipe:function(event, direction, distance, duration, fingerCount) {
+			    	d = direction 
+			    },
+			   //Default is 75px, set to 0 
+			   threshold:0
 	    	});
 
 		    function create_snake(){
@@ -127,7 +135,8 @@
 					y: Math.round(Math.random()*(h-cw)/cw),
 					value:  value
 				};
-			}	
+			}
+
 			function check_collision(x, y, array){
 				for(var i = 0; i < array.length; i++){
 					if(array[i].x == x && array[i].y == y)
@@ -135,6 +144,7 @@
 				}
 				return false;
 			}
+
 			function generateEquation(){
 		    	// simple random equation generator 
 		    	var eqn,op,ans,a,b;
@@ -305,25 +315,8 @@
 		    	$('#scoreDisplay').text("Your score was: "+score);		    	
 		    }
 
-			//Lets add the keyboard controls now
-			$(document).keydown(function(k){
-				var key = k.which;
-				//prevent reverse directions
-				if(key == "37" && d != "right") d = "left";
-				else if(key == "38" && d != "down") d = "up";
-				else if(key == "39" && d != "left") d = "right";
-				else if(key == "40" && d != "up") d = "down";
-			});
+		
 
-			//Enable swiping...
-			$(document).swipe( {
-			    //Generic swipe handler for all directions
-			    swipe:function(event, direction, distance, duration, fingerCount) {
-			    	d = direction 
-			    },
-			   //Default is 75px, set to 0 
-			   threshold:0
-			});
 
 		}) // end of ready()
 
