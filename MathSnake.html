@@ -77,45 +77,41 @@
 			var welcome = true;
 
 			function init(){
-				if(welcome){
-					$('#welcomeModal').modal('show');
+				
+		
+				d = "right"; //default direction
+				create_snake();
+				generateEquation();
+				renderGrid(40, "#EEEEEE");
+				
+				score = 0;
 
-					$(document).keydown(function(e){
-						var key = e.which;
-						if(key == "13" || key == "32"){
-							$('#welcomeModal').modal('hide');
-							run = true;
-							welcome = false;
-							return init();
-						}			
-					});
-					$(document).swipe({
-			    		tap:function(){
-			    			$('#welcomeModal').modal('hide');
-			    			run = true;
-			    			welcome = false;
-			    			return init();
-			    		},
-			    		threshold:20
-			    	});
+		    	// Repaint at some particular interval
+		    	if(typeof game_loop != "undefined") clearInterval(game_loop);
+		    	
+		    	game_loop = setInterval(paint, 160);
+		
+			}
 
+		    $('#welcomeModal').modal('show');
+
+	       	$(document).keydown(function(k){
+	    		if(k == 13 || k == 32){
+					$('#welcomeModal').modal('hide');
+					$('#myModal').modal('hide');
+					run = true;
+					return init();
 				}
-				if(run){
-					d = "right"; //default direction
-					create_snake();
-					generateEquation();
-					renderGrid(40, "#EEEEEE");
-					
-					score = 0;
-
-			    	// Repaint at some particular interval
-			    	if(typeof game_loop != "undefined") clearInterval(game_loop);
-			    	
-			    	game_loop = setInterval(paint, 160);
-		    	}
-		    }
-
-		    init();
+			});
+	    	$(document).swipe({
+	    		tap:function(){
+	    			$('#welcomeModal').modal('hide');
+	    			$('#myModal').modal('hide');
+	    			run = true;
+	    			return init();
+	    		},
+	    		threshold:5
+	    	});
 
 		    function create_snake(){
 				//Length of initial snake
@@ -305,39 +301,19 @@
 		    }
 		    function reset(){
 		    	run = false;
-			    if(!run){
-			    	$('#myModal').modal('show');
-			    	$('#scoreDisplay').text("Your score was: "+score);
-
-			    	$(document).keydown(function(k){
-			    		if(k == 13 || k == 32){
-							$('#myModal').modal('hide');
-							run = true;
-							return init();
-						}
-					});
-			    	$(document).swipe({
-			    		tap:function(){
-			    			$('#myModal').modal('hide');
-			    			run = true;
-			    			return init();
-			    		},
-			    		threshold:20
-			    	});
-		    	}
-
+		    	$('#myModal').modal('show');
+		    	$('#scoreDisplay').text("Your score was: "+score);		    	
 		    }
 
 			//Lets add the keyboard controls now
-			$(document).keydown(function(e){
-				var key = e.which;
+			$(document).keydown(function(k){
+				var key = k.which;
 				//prevent reverse directions
 				if(key == "37" && d != "right") d = "left";
 				else if(key == "38" && d != "down") d = "up";
 				else if(key == "39" && d != "left") d = "right";
 				else if(key == "40" && d != "up") d = "down";
-			})
-			
+			});
 
 			//Enable swiping...
 			$(document).swipe( {
