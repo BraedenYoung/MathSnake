@@ -19,18 +19,24 @@
 			margin-left: auto;
 			width: 400px;
 		}
+		.view-window{
+			margin-right: auto;
+			margin-left: auto;
+			padding: 2%;
+				
+		}
 	</style>
 	<link href="http://netdna.bootstrapcdn.com/bootstrap/3.0.3/css/bootstrap.min.css"
 	rel="stylesheet">
 </head>
 <body>
-	
-	<div class="container-canvas">
-		<canvas id="canvas" width="400" height="400"></canvas>
+	<div class="view-window">
+		<div class="container-canvas">
+			<canvas id="canvas" width="400" height="400"></canvas>
+		</div>
+		
+		<h1 id="equation" style="text-align:center"></h1>
 	</div>
-	
-	<h1 id="equation" style="text-align:center"></h1>
-
 	<div class="modal fade" id="welcomeModal" tabindex="-1" role="dialog" aria-labelledby="modal" aria-hidden="true">
 		<div class="modal-dialog">
 			<div class="modal-content">
