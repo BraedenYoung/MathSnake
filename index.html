@@ -15,9 +15,8 @@
 			padding-right: 0;
 			padding-left: 0;
 			margin-top: 5%;
-			margin-right: auto;
-			margin-left: auto;
-			width: 400px;
+			margin-right: 1%;
+			margin-left: 1%	;
 		}
 	</style>
 	<link href="http://netdna.bootstrapcdn.com/bootstrap/3.0.3/css/bootstrap.min.css"
@@ -26,7 +25,7 @@
 <body>
 	
 	<div class="container-canvas">
-		<canvas id="canvas" width="400" height="400"></canvas>
+		<canvas id="canvas"></canvas>
 	</div>
 	
 	<h1 id="equation" style="text-align:center"></h1>
@@ -95,12 +94,19 @@
 	<script>
 		$(document).ready(function(){
 
-			var canvas = $("#canvas")[0];
+			var windowWidth = window.innerWidth;
+			var windowHeight = window.innerHeight;
+
+			var pixelRatio = window.devicePixelRatio || 1; /// get pixel ratio of device
+
+			canvas = document.getElementById("canvas");
+
+			canvas.width = windowWidth * pixelRatio / 3;   /// resolution of canvas
+			canvas.height = canvas.width
+
 			var ctx = canvas.getContext("2d");
-			//ctx.scale(9/10,9/10);
-			var w = $("#canvas").width();
-			var h = $("#canvas").height();
-			var cw = 40;
+		
+			var cw = canvas.width/10
 			var d, food, score, snake_array;
 			var foodPellets = [];
 			var run = false;
@@ -118,7 +124,7 @@
 				d = "right"; //default direction
 				create_snake();
 				generateEquation();
-				renderGrid(40, "#EEEEEE");		
+				renderGrid(cw/40, "#EEEEEE");		
 				score = 0;
 		    	// Repaint at some particular interval
 		    	if(typeof game_loop != "undefined") clearInterval(game_loop);
@@ -169,8 +175,8 @@
 			}
 			function create_food(value){
 				return food = {
-					x: Math.round(Math.random()*(w-cw)/cw), 
-					y: Math.round(Math.random()*(h-cw)/cw),
+					x: Math.round(Math.random()*(canvas.width-cw)/cw), 
+					y: Math.round(Math.random()*(canvas.height-cw)/cw),
 					value:  value
 				};
 			}
@@ -251,12 +257,12 @@
 		    	if(run){
 					// paint the canvas now
 					ctx.fillStyle = "white";
-					ctx.fillRect(0, 0, w, h);
+					ctx.fillRect(0, 0, canvas.width, canvas.height);
 					ctx.strokeStyle = "black";
-					ctx.strokeRect(0, 0, w, h);
+					ctx.strokeRect(0, 0, canvas.width, canvas.height);
 					
 					// paint the grid
-					renderGrid(40, "#bab8b8");
+					renderGrid(cw, "#bab8b8");
 
 					//The movement for the snake
 					//Pop off the tail and place it infront of the head in the current direction
@@ -269,7 +275,7 @@
 					else if(d == "down") ny++;
 					
 					//Restart the game if the snake hits the wall or if the snake eats a bad pellet
-					if(nx == -1 || nx == w/cw || ny == -1 || ny == h/cw || check_collision(nx, ny, snake_array)||nx == foodPellets[1].x && ny == foodPellets[1].y||nx == foodPellets[2].x && ny == foodPellets[2].y){
+					if(nx == -1 || nx == canvas.width/cw || ny == -1 || ny == canvas.height/cw || check_collision(nx, ny, snake_array)||nx == foodPellets[1].x && ny == foodPellets[1].y||nx == foodPellets[2].x && ny == foodPellets[2].y){
 						//restart game
 						reset();
 					}
@@ -303,7 +309,7 @@
 					ctx.fillStyle = "#477282";
 					var score_text = "Score: " + score;
 					ctx.font="30px Arial";
-					ctx.fillText(score_text, 5, h-5);
+					ctx.fillText(score_text, 5, canvas.height-5);
 				}
 			}
 
