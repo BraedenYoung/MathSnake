@@ -97,11 +97,9 @@
 			var windowWidth = window.innerWidth;
 			var windowHeight = window.innerHeight;
 
-			var pixelRatio = window.devicePixelRatio || 1; /// get pixel ratio of device
-
 			canvas = document.getElementById("canvas");
 
-			canvas.width = windowWidth * pixelRatio;   /// resolution of canvas
+			canvas.width = windowWidth
 			canvas.height = canvas.width
 
 			var ctx = canvas.getContext("2d");
@@ -131,8 +129,6 @@
 		    	
 		    	game_loop = setInterval(paint, gameSpeed);
 			}
-
-		    
 
 	       	$(document).keydown(function(k){
 	       		var key = k.which;
