@@ -1,7 +1,6 @@
 <?xml version='1.0' encoding='utf-8'?>
 <widget id="com.app.mathsnake" version="0.0.1" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
-<gap:plugin name="com.adobe.plugins.fastcanvas"/>
-<preference name="orientation" value="portrait" />
+<preference name="orientation" value="portrait"/>
     <name>Mathsnake</name>
     <description>
         A new twist on the Snake classic, where users are pressed to choose between three food pellets; one of which is the correct answer to the math problem, the rest are poisoned.
