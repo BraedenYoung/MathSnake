@@ -78,7 +78,7 @@
 				</div>
 				<div class="modal-body">
 					<h3 id="scoreDisplay">Your score was: </h3>
-<fb:login-button scope="user_games_activity, publish_actions"></fb:login-button>
+					<fb:login-button scope="user_games_activity, publish_actions"></fb:login-button>
 				</div>
 				<div class="modal-footer">
 					<h3 style="text-align:center">press enter to play again</h3>
@@ -98,12 +98,12 @@
 
 			canvas = document.getElementById("canvas");
 
-			canvas.width = windowWidth
-			canvas.height = canvas.width
+			canvas.width = windowWidth/ 3;
+			canvas.height = canvas.width;
 
 			var ctx = canvas.getContext("2d");
-		
-			var cw = canvas.width/10
+
+			var cw = canvas.width/10;
 			var d, food, score, snake_array;
 			var foodPellets = [];
 			var run = false;
@@ -117,7 +117,7 @@
 			}
 
 			function init(){
-		
+
 				d = "right"; //default direction
 				create_snake();
 				generateEquation();
@@ -127,38 +127,38 @@
 		    	if(typeof game_loop != "undefined") clearInterval(game_loop);
 		    	
 		    	game_loop = setInterval(paint, gameSpeed);
-			}
+		    }
 
-	       	$(document).keydown(function(k){
-	       		var key = k.which;
-	    		if(key == 13 || key == 32){
-					$('#welcomeModal').modal('hide');
-					$('#myModal').modal('hide');
-					run = true;
-					return init();
-				}
-				else if(key == "37" && d != "right") d = "left";
-				else if(key == "38" && d != "down") d = "up";
-				else if(key == "39" && d != "left") d = "right";
-				else if(key == "40" && d != "up") d = "down";
-			});
-	    	$(document).swipe({
-	    		tap:function(){
-	    			if(!run){
+		    $(document).keydown(function(k){
+		    	var key = k.which;
+		    	if(key == 13 || key == 32){
+		    		$('#welcomeModal').modal('hide');
+		    		$('#myModal').modal('hide');
+		    		run = true;
+		    		return init();
+		    	}
+		    	else if(key == "37" && d != "right") d = "left";
+		    	else if(key == "38" && d != "down") d = "up";
+		    	else if(key == "39" && d != "left") d = "right";
+		    	else if(key == "40" && d != "up") d = "down";
+		    });
+		    $(document).swipe({
+		    	tap:function(){
+		    		if(!run){
 		    			$('#welcomeModal').modal('hide');
 		    			$('#mobileWelcomeModal').modal('hide');
 		    			$('#myModal').modal('hide');
 		    			run = true;
 		    			return init();
 		    		}
-	    		},
-	    		threshold:5,
-	    		swipe:function(event, direction, distance, duration, fingerCount) {
-			    	d = direction 
-			    },
+		    	},
+		    	threshold:5,
+		    	swipe:function(event, direction, distance, duration, fingerCount) {
+		    		d = direction 
+		    	},
 			   //Default is 75px, set to 0 
 			   threshold:0
-	    	});
+			});
 
 		    function create_snake(){
 				//Length of initial snake
@@ -168,11 +168,56 @@
 					snake_array.push({x: i, y:0});
 				}
 			}
+
 			function create_food(value){
+				var HEAD_BUFFER = 2;
+
+				do{
+					debugger;
+					var redo = false;
+					var x = Math.round(Math.random()*(canvas.width-cw)/cw);
+					var y = Math.round(Math.random()*(canvas.height-cw)/cw);
+
+					for (food in foodPellets){
+
+						// check to see if there is already a food pellet there
+						if (food.x == x && food.y == y){
+							redo = true;
+							break;
+						}
+
+						// check to see if the food pellet is too close to the head
+						// of the snake.
+						if(d == "right") {
+							if (food.x < x && x < food.x + HEAD_BUFFER)	{
+								redo = true;
+								break;
+							}						
+						}else if(d == "left"){
+							if (food.x > x && x > food.x + HEAD_BUFFER)	{
+								redo = true;
+								break;
+							}
+						}
+						else if(d == "up") {
+							if (food.y > x && x > food.y + HEAD_BUFFER)	{
+								redo = true;
+								break;
+							}
+						}
+						else if(d == "down") {
+							if (food.y < x && x < food.y + HEAD_BUFFER)	{
+								redo = true;
+								break;
+							}
+						}
+					}
+				}while(redo);
+
 				return food = {
-					x: Math.round(Math.random()*(canvas.width-cw)/cw), 
-					y: Math.round(Math.random()*(canvas.height-cw)/cw),
-					value:  value
+					x: x, 
+					y: y,
+					value: value
 				};
 			}
 
