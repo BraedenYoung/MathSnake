@@ -5,7 +5,7 @@ $(document).ready(function(){
 
 	canvas = document.getElementById('canvas');
 
-	canvas.width = windowWidth/2;
+	canvas.width = windowWidth;
 	canvas.height = canvas.width;
 
 	var ctx = canvas.getContext('2d');
