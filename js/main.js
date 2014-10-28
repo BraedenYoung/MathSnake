@@ -21,6 +21,8 @@ $(document).ready(function(){
 		$('#mobileWelcomeModal').modal('show');
 	}else{
 		$('#welcomeModal').modal('show');
+		$('canvas').addClass('center-block')
+		$('.container-canvas').addClass('center-block')
 	}
 
 	function init(){
